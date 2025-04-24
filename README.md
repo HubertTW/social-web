@@ -68,7 +68,7 @@ or use IDE to run
 ## Comments
 
 * GET:http://127.0.0.1:8080/comment
-* PUT::http://127.0.0.1:8080/comment{commentid}
+* PUT::http://127.0.0.1:8080/comment/{commentid}
 ```
 {
 "content":"best comment"
