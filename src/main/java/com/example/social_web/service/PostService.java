@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface PostService {
     List<Post> getPost();
-    String createPost(Post post);
-    void updatePost(int id, Post post);
-    void deletePost(int id);
+    Post getPostById(Integer id);
+    boolean createPost(Post post);
+    boolean updatePost(Integer id, Post post);
+    boolean deletePost(Integer id);
 }

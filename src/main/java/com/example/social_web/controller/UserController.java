@@ -20,16 +20,10 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> createUser(@RequestBody User userRequest) {
-        System.out.println("[DEBUG]user_id: " + userRequest.getUserId());
-        System.out.println("user_name"+userRequest.getUserName());
-        System.out.println("email"+userRequest.getEmail());
-        System.out.println("password"+userRequest.getPassword());
-        System.out.println("cover_image"+userRequest.getCoverImage());
-        System.out.println("biography"+userRequest.getBiography());
 
-        String userId = userService.createUser(userRequest);
+        String res = userService.createUser(userRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
 

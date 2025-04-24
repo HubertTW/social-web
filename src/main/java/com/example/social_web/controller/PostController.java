@@ -22,6 +22,7 @@ public class PostController {
     @GetMapping
     public ResponseEntity<List<Post>> getPost() {
         List<Post> all_posts = postService.getPost();
+        /* TODO: should fetch userName instead of userId */
 
         if (all_posts != null) {
             return ResponseEntity.status(HttpStatus.OK).body(all_posts);
@@ -32,36 +33,50 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<?> createPost(@RequestBody Post postRequest, HttpSession session) {
-        Object userId = session.getAttribute("userId");
+        String userId = (String) session.getAttribute("userId");
 
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("login required");
         }
+        /* userid shouldn't be from frontend */
+        postRequest.setUserId(userId);
 
-        postService.createPost(postRequest);
-        return ResponseEntity.ok("Post created.");
+        if (postService.createPost(postRequest)) {
+            return ResponseEntity.ok("Post created.");
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create post");
+        }
     }
-    /*
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable int id, @RequestBody Post post) {
-        Post existing = postService.findById(id);
-        if (!existing.getUsername().equals(authentication.getName())) {
+    public ResponseEntity<?> updatePost(@PathVariable Integer id, @RequestBody Post post, HttpSession session) {
+        /* TODO: for validation, should use @PreAuthorize("@postPermissionService.canEdit(#postId, principal.username)")*/
+        Post existing = postService.getPostById(id);
+        if (!existing.getUserId().equals(session.getAttribute("userId"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No permission");
         }
-        existing.setContent(post.getContent());
-        postService.save(existing);
-        return ResponseEntity.ok("Updated.");
+        if (postService.updatePost(id, post)) {
+            return ResponseEntity.ok("Updated.");
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update post");
+        }
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable int id, Authentication authentication) {
-        Post existing = postService.findById(id);
-        if (!existing.getUsername().equals(authentication.getName())) {
+    public ResponseEntity<?> deletePost(@PathVariable Integer id, HttpSession session) {
+        /* TODO: for validation, should use @PreAuthorize("@postPermissionService.canEdit(#postId, principal.username)")*/
+        Post existing = postService.getPostById(id);
+        if (!existing.getUserId().equals(session.getAttribute("userId"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No permission");
         }
-        postService.delete(id);
-        return ResponseEntity.ok("Deleted.");
+
+        if (postService.deletePost(id)) {
+            return ResponseEntity.ok("deleted.");
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete post");
+        }
     }
-    */
+
 
 }

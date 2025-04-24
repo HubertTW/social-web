@@ -1,12 +1,14 @@
 package com.example.social_web.dto;
 
+import java.util.Date;
+
 public class PostRequest {
 
     private int postId;
     private int userId;
     private String content;
     private String image;         // 可為 null，表示沒有圖片
-    private String createdAt;     // 若要精確控制可改為 java.sql.Timestamp
+    private Date createdAt;     // 若要精確控制可改為 java.sql.Timestamp
 
     // Getters and Setters
     public int getPostId() {
@@ -41,11 +43,11 @@ public class PostRequest {
         this.image = image;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 

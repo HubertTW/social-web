@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface PostDao {
     List<Post> getPost();
-    String createPost(Post postRequest);
-    String updatePost(Post postRequest);
-    String deletePost(int postId);
+    Post getPostById(Integer id);
+    boolean createPost(Post postRequest);
+    boolean updatePost(Integer id, Post post);
+    boolean deletePost(Integer postId);
+
 }
